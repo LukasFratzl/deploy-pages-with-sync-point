@@ -45,6 +45,10 @@ class FileSync:
             return False
 
         file_abs_path = str(file_path.absolute())
+
+        if not file_abs_path.endswith('.zip'):
+            return False
+
         file_mtime = os.path.getmtime(file_path)
         if file_abs_path in self.files_mtimes:
             if self.files_mtimes[file_abs_path] == file_mtime:

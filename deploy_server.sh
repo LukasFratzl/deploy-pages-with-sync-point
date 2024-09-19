@@ -11,7 +11,7 @@ echo "Starting Deploy from server script"
 # deploy_client_temp_file_dir is like always the extracted dir name
 # the folder is relative one level deeper on the sync point folder on the server
 # and in this case I treat it as a temp folder anyway....
-deploy_archive_folder="/home/flow____/deploy_client_temp_file_dir"
+deploy_archive_folder="/var/www/lukas.read-books.org/public_html/nextcloud/data/flow/files/deploy_client_temp_file_dir"
 
 # the wanted folder ...
 deploy_wanted_folder="/var/www/lukas.read-books.org/public_html/blog"
