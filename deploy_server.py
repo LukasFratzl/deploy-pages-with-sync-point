@@ -86,6 +86,28 @@ class FileSync:
         shutil.unpack_archive(file_abs_path, temp_dir_name, 'zip')
 
         temp_info_file_name = normalize_path(Path.joinpath(Path(temp_dir_name), 'deploy_client_info.json'))
+
+        if not Path(temp_info_file_name).is_file():
+            # If there is no info file the whole extracted archive is pretty useless for this deploy system
+            # as it depending on server scripts, so clean up and exclude it
+            for filename in os.listdir(temp_dir_name):
+                file_path = os.path.join(temp_dir_name, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+            try:
+                os.removedirs(temp_dir_name)
+            except Exception as e:
+                print('Failed to delete temp dir %s. Reason: %s' % (temp_dir_name, e))
+
+            print('An archive without an info file got detected ... excluding it')
+            return False
+
         with open(temp_info_file_name, 'r') as f:
             data = json.load(f)
 
