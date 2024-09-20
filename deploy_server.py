@@ -12,10 +12,11 @@ CONVERT_IGNORE_FOLDERS = ['']  # In this case it's '/ROOT_DIR/.../Ignore File Na
 SYNC_POINT_SYN = ['-s', '--sync_point']
 
 # needs to be without extension and needs to be identical in the client except including {0}
-TEMP_FILE_NAME = 'deploy_client_file_123454321_'
+TEMP_FILE_NAME = 'deploy_client_file_'
 
 # Needs to be identical in the client
 JSON_INVOKE_AFTER_PATH = 'Invoke After'
+JSON_META_COLLECTION_NAME = 'Computed Items'
 
 
 def run_command(cmd):
@@ -62,16 +63,34 @@ class FileSync:
         if TEMP_FILE_NAME not in file_path.name:
             return False
 
+        collection_json_name = normalize_path(Path.joinpath(Path(SYNC_POINT_DIR), 'deploy_meta.json'))
+        if Path(collection_json_name).is_file():
+            with open(collection_json_name, 'r') as f:
+                meta_data_json = json.load(f)
+        else:
+            meta_data_json = {JSON_META_COLLECTION_NAME: []}
+
+        if JSON_META_COLLECTION_NAME in meta_data_json and file_abs_path in meta_data_json[JSON_META_COLLECTION_NAME]:
+            return False
+        if JSON_META_COLLECTION_NAME not in meta_data_json:
+            meta_data_json[JSON_META_COLLECTION_NAME] = [file_abs_path]
+        else:
+            meta_data_json[JSON_META_COLLECTION_NAME].append(file_abs_path)
+
+        with open(collection_json_name, 'w') as f:
+            json.dump(meta_data_json, f)
+
         temp_dir_name = normalize_path(Path.joinpath(Path(SYNC_POINT_DIR).parent.absolute(), "deploy_client_temp_file_dir"))
 
         print('Unpacking archive to:', temp_dir_name)
         shutil.unpack_archive(file_abs_path, temp_dir_name, 'zip')
 
-        os.remove(file_abs_path)
-
         temp_info_file_name = normalize_path(Path.joinpath(Path(temp_dir_name), 'deploy_client_info.json'))
         with open(temp_info_file_name, 'r') as f:
             data = json.load(f)
+
+        if Path(temp_info_file_name).is_file():
+            os.remove(temp_info_file_name)
 
         if JSON_INVOKE_AFTER_PATH in data and data[JSON_INVOKE_AFTER_PATH] != '':
             cmd_file = data[JSON_INVOKE_AFTER_PATH]

@@ -10,7 +10,7 @@ from datetime import datetime
 ROOT_DIR = '/No/Valid/Path/'
 TARGET_SYNC_POINT = '/No/Valid/Path/'
 
-TEMP_FILE_NAME = 'deploy_client_file_123454321_{0}'  # needs to be without extension and identical in the server
+TEMP_FILE_NAME = 'deploy_client_file_{0}'  # needs to be without extension and identical in the server
 
 CONVERT_IGNORE_FOLDERS = ['']  # In this case it's '/ROOT_DIR/.../Ignore File Name
 
