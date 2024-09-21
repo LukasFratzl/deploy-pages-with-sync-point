@@ -44,4 +44,5 @@ python "deploy_client.py" --root "/Path/To/Html/Dev" --sync_point ".../Client Sy
   - Start the script without the server and it does create the archive in the sync point path
     - If the server is enabled it will do the needed job on the server
     - Repeat this client command if needed..
+- Create a sync point with Nextcloud, FTP, git, web hooks etc. in this repo I use [git annex](https://git-annex.branchable.com/), basically init git annex, add credentials to your repo to not need to type the password every time, run `sync-git-annex.sh` ( Script for windows coming soon ), in my case I have the `main` naming convention for my main branch on the sync repo
 
