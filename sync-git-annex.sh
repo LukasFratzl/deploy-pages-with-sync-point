@@ -3,6 +3,10 @@
 
 while :
 do
+  # Make sure to call git in the repo root ( Where the script should be )
+  SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+  cd "$SCRIPT_DIR"
+
   # Push
   if [ ! -z "$(git status --porcelain)" ]; then
       git add .
