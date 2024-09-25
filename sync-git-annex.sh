@@ -3,8 +3,8 @@
 
 while :
 do
-  # Make sure to call git in the repo root ( Where the script should be )
   SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
   cd "$SCRIPT_DIR"
 
   # Push
@@ -14,11 +14,7 @@ do
   fi
 
   # Pull
-  git fetch --all
-  if [ "$(git rev-parse origin/main)" != "$(git rev-parse HEAD)" ]; then
-    git annex sync --content
-  fi
-
-  sleep 1
+  git annex pull
+  sleep 0.5
 
 done
