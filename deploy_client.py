@@ -38,7 +38,7 @@ class FileSync:
         pass
 
     def zip_root_dir(self):
-        current_time = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+        current_time = datetime.now().strftime('%Y-%m-%d_%H%M%S')
         root_dir = Path(ROOT_DIR)
         zip_file_name = Path(normalize_path(Path.joinpath(root_dir.parent.absolute(), TEMP_FILE_NAME.format(current_time) + '.zip')))
         if zip_file_name.is_file():
