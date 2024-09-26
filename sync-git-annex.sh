@@ -1,10 +1,10 @@
 #!/bin/bash
 # Syncs Repos with git annex https://git-annex.branchable.com/
 
-while :
-do
-  SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+# Define sync function
+sync() {
   cd "$SCRIPT_DIR"
 
   # Push
@@ -15,6 +15,15 @@ do
 
   # Pull
   git annex pull
-  sleep 0.5
+}
 
-done
+# Check if the user wants to run in loop mode
+if [ "$1" = "-loop" ] && [ "$2" = "false" ]; then
+  sync
+else
+  while :; do
+    sync
+
+    sleep 0.5
+  done
+fi
